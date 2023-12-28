@@ -1,0 +1,36 @@
+/*  Most of repositories will probably need generic 
+    save/find/delete operations, so it's easier
+    to have some shared interfaces.
+    More specific queries should be defined
+    in a respective repository.
+*/
+
+export class Paginated<T> {
+  readonly count: number;
+  readonly limit: number;
+  readonly cursor: string;
+  readonly data: readonly T[];
+
+  constructor(props: Paginated<T>) {
+    this.count = props.count;
+    this.limit = props.limit;
+    this.cursor = props.cursor;
+    this.data = props.data;
+  }
+}
+
+export type OrderBy = { field: string; param: 'asc' | 'desc' };
+
+export type PaginatedQueryParams = {
+  limit: number;
+  cursor?: string;
+  orderBy: OrderBy;
+};
+
+export abstract class RepositoryPort<Entity> {
+  // add more methods depending on the implementations
+  abstract create(entity: Entity): Promise<Entity>;
+  abstract findById(id: string): Promise<Entity | null>;
+  abstract delete(id: string): Promise<boolean>;
+  abstract update(entity: Entity): Promise<Entity>;
+}
