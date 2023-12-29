@@ -7,6 +7,7 @@ import { AccountApplicationService } from './application/ports/account.applicati
 import { LoggerModule } from '@src/shared/infrastructure/logger/logger.module';
 import { PublisherModule } from '@src/shared/infrastructure/publisher/publisher.module';
 import { AccountCreatedEventHandler } from './application/event-handlers/account-created.event.handler';
+import { ProfileCreatedEventHandler } from './application/event-handlers/profile-created.event.handler';
 
 const resolvers: Provider[] = [AccountResolver];
 const applicationServices: Provider[] = [
@@ -16,7 +17,10 @@ const applicationServices: Provider[] = [
   },
   AccountApplicationServiceImpl,
 ];
-const eventHandlers: Provider[] = [AccountCreatedEventHandler];
+const eventHandlers: Provider[] = [
+  AccountCreatedEventHandler,
+  ProfileCreatedEventHandler,
+];
 
 @Module({
   imports: [

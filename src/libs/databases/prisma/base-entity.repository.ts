@@ -35,14 +35,14 @@ type fullOptionsWithInclude<T extends Models> = [
   ...fullOptionsWithoutInclude<T>,
 ];
 
-export abstract class BaseEntityRepository<
+export abstract class BaseOrmEntityRepository<
   Aggregate extends AggregateRoot<any>,
   DbModel extends ObjectLiteral,
   T extends Prisma.ModelName,
 > implements RepositoryPort<Aggregate>
 {
-  protected modelName: Prisma.ModelName;
-  protected readonly prismaService: PrismaService;
+  protected abstract modelName: Prisma.ModelName;
+  protected abstract readonly prismaService: PrismaService;
 
   constructor(protected readonly mapper: Mapper<Aggregate, DbModel>) {}
 

@@ -22,7 +22,30 @@ input AccountUpdateDto {
 
 type Mutation {
   createAccount(input: AccountCreateInput!): AccountResponseDto!
+  createProfile(input: ProfileCreateDto!): ProfileResponseDto!
   updateAccount(input: AccountUpdateDto!): AccountResponseDto!
+  updateProfile(input: ProfileUpdateDto!): ProfileResponseDto!
+}
+
+input ProfileCreateDto {
+  accountId: String!
+  bio: String
+  name: String!
+}
+
+type ProfileResponseDto {
+  accountId: String!
+  bio: String
+  createdAt: String!
+  id: String!
+  name: String!
+  updatedAt: String!
+}
+
+input ProfileUpdateDto {
+  bio: String
+  name: String!
+  profileId: String!
 }
 
 type Query {

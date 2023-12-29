@@ -11,22 +11,23 @@ datasource db {
 }
 
 model Account {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  email     String    @unique
-  password  String
-  profiles  Profile[]
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  email       String    @unique
+  profilesIds String[]
+  password    String
+  profiles    Profile[]
 }
 
 model Profile {
-  id               String    @id @default(cuid())
+  id               String    @id @default(uuid())
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   bio              String?
-  image            String?
-  account          Account   @relation(fields: [userId], references: [id])
-  userId           String
+  name             String
+  accountId        String
+  account          Account   @relation(fields: [accountId], references: [id])
   pictures         Picture[]
   chats            Chat[]
   outgoingLikes    Like[]    @relation("ProfileToOutgoingLikes")

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseEntityRepository } from '@src/libs/databases/prisma/base-entity.repository';
+import { BaseOrmEntityRepository } from '@src/libs/databases/prisma/base-entity.repository';
 import { AccountEntity } from '@src/modules/user-management/account/domain/account.entity';
 import { AccountDatabaseModel } from '../schema/account.schema';
 import { AccountRepository } from './account.repository.port';
@@ -10,7 +10,11 @@ import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 
 @Injectable()
 export class AccountRepositoryImpl
-  extends BaseEntityRepository<AccountEntity, AccountDatabaseModel, 'Account'>
+  extends BaseOrmEntityRepository<
+    AccountEntity,
+    AccountDatabaseModel,
+    'Account'
+  >
   implements AccountRepository
 {
   protected prismaService: PrismaService;
@@ -21,6 +25,15 @@ export class AccountRepositoryImpl
     this.prismaService = new PrismaService(
       createLogger(AccountRepositoryImpl.name),
     );
+  }
+  async updateAccountProfileIds(
+    accountId: string,
+    profileId: string,
+  ): Promise<void> {
+    await this.prismaService.account.update({
+      where: { id: accountId },
+      data: { profilesIds: { push: profileId } },
+    });
   }
 
   async findOneByEmail(email: string): Promise<AccountEntity | null> {

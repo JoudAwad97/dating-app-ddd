@@ -6,6 +6,7 @@ import { ContextInterceptor } from './libs/application/context/ContextIntercepto
 import { LoggerModule } from './shared/infrastructure/logger/logger.module';
 import { RequestContextModule } from 'nestjs-request-context';
 import { ConfigModule } from '@nestjs/config';
+import { ProfileModule } from './modules/user-management/profile/profile.module';
 
 const interceptors: Provider[] = [
   {
@@ -17,6 +18,7 @@ const interceptors: Provider[] = [
 @Module({
   imports: [
     AccountModule,
+    ProfileModule,
     LoggerModule,
     RequestContextModule,
     ConfigModule.forRoot(),
