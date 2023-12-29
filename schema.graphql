@@ -14,8 +14,15 @@ type AccountResponseDto {
   updatedAt: String!
 }
 
+input AccountUpdateDto {
+  email: String!
+  id: String!
+  password: String
+}
+
 type Mutation {
   createAccount(input: AccountCreateInput!): AccountResponseDto!
+  updateAccount(input: AccountUpdateDto!): AccountResponseDto!
 }
 
 type Query {

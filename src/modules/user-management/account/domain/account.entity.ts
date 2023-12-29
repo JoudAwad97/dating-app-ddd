@@ -42,6 +42,10 @@ export class AccountEntity extends AggregateRoot<AccountProps> {
     );
   }
 
+  updatePassword(password: string) {
+    this.props.password = password;
+  }
+
   emailCanBeUsedForRegistration() {
     throw UserErrors.EmailAlreadyInUse();
   }

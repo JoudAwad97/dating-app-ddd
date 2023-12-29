@@ -1,7 +1,9 @@
 import { AccountEntity } from '../domain/account.entity';
+import { UserErrors } from '../domain/user.errors';
 import { AccountMapper } from '../infrastructure/persistence/orm/mapper/account.mapper.port';
 import { AccountRepository } from '../infrastructure/persistence/orm/repository/account.repository.port';
 import { AccountCreateInput } from '../presenter/dto/account-create.dto';
+import { AccountUpdateDto } from '../presenter/dto/account-update.dto';
 import { AccountResponseDto } from '../presenter/dto/account.dto';
 import { AccountApplicationService } from './ports/account.application.service.port';
 import { Injectable } from '@nestjs/common';
@@ -41,6 +43,44 @@ export class AccountApplicationServiceImpl
     const accountDb = await this.accountRepository.create(account);
 
     account.publishEvents(this.publisher, this.logger);
+
+    return this.accountMapper.toResponse(accountDb);
+  }
+
+  async updateAccount(
+    accountUpdateDto: AccountUpdateDto,
+  ): Promise<AccountResponseDto> {
+    this.logger.log('AccountApplicationServiceImpl.updateAccount');
+
+    const { id, email, password } = accountUpdateDto;
+
+    const [accountToBeUpdated, accountWithSameEmail] = await Promise.all([
+      this.accountRepository.findById(id),
+      this.accountRepository.findOneByEmail(email),
+    ]);
+
+    if (!accountToBeUpdated) {
+      throw UserErrors.AccountNotFound();
+    }
+
+    if (
+      accountWithSameEmail &&
+      accountWithSameEmail.id.toString() !== accountToBeUpdated.id.toString()
+    ) {
+      throw UserErrors.EmailAlreadyInUse();
+    }
+
+    if (password) {
+      accountToBeUpdated.updatePassword(password);
+    }
+
+    if (email) {
+      accountToBeUpdated.updateEmail(email);
+    }
+
+    const accountDb = await this.accountRepository.update(accountToBeUpdated);
+
+    accountToBeUpdated.publishEvents(this.publisher, this.logger);
 
     return this.accountMapper.toResponse(accountDb);
   }

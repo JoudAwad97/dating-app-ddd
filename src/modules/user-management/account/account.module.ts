@@ -6,6 +6,7 @@ import { AccountApplicationServiceImpl } from './application/account.application
 import { AccountApplicationService } from './application/ports/account.application.service.port';
 import { LoggerModule } from '@src/shared/infrastructure/logger/logger.module';
 import { PublisherModule } from '@src/shared/infrastructure/publisher/publisher.module';
+import { AccountCreatedEventHandler } from './application/event-handlers/account-created.event.handler';
 
 const resolvers: Provider[] = [AccountResolver];
 const applicationServices: Provider[] = [
@@ -15,6 +16,7 @@ const applicationServices: Provider[] = [
   },
   AccountApplicationServiceImpl,
 ];
+const eventHandlers: Provider[] = [AccountCreatedEventHandler];
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ const applicationServices: Provider[] = [
     LoggerModule,
     PublisherModule,
   ],
-  providers: [...resolvers, ...applicationServices],
+  providers: [...resolvers, ...applicationServices, ...eventHandlers],
   controllers: [],
   exports: [],
 })
