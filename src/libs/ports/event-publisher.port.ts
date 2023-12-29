@@ -10,8 +10,4 @@ export abstract class EventPublisher {
     eventName: string,
     eventPayload: IntegrationEvent,
   ): void;
-  abstract sendAndReceiveMessage<T>(
-    messagePattern: string,
-    payload: IRequestPayload,
-  ): Promise<T>;
 }

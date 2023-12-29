@@ -1,0 +1,23 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AccountCreateInput {
+  email: String!
+  password: String!
+}
+
+type AccountResponseDto {
+  createdAt: String!
+  email: String!
+  id: String!
+  updatedAt: String!
+}
+
+type Mutation {
+  createAccount(input: AccountCreateInput!): AccountResponseDto!
+}
+
+type Query {
+  hello: String!
+}

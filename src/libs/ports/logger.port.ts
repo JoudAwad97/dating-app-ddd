@@ -1,4 +1,4 @@
-export abstract class LoggerPort {
+export abstract class ILogger {
   abstract log(message: any, context?: string): void;
   abstract error(message: any, stackOrContext?: string): void;
   abstract warn(message: any, context?: string): void;

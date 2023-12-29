@@ -1,3 +1,4 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { IdResponse } from './id.response.dto';
 
 export interface BaseResponseProps {
@@ -11,6 +12,7 @@ export interface BaseResponseProps {
  * id, createdAt and updatedAt so we can move them to a
  * separate class and extend it to avoid duplication.
  */
+@ObjectType()
 export class ResponseBase extends IdResponse {
   constructor(props: BaseResponseProps) {
     super(props.id);
@@ -18,7 +20,12 @@ export class ResponseBase extends IdResponse {
     this.updatedAt = new Date(props.updatedAt).toISOString();
   }
 
+  @Field()
+  readonly id: string;
+
+  @Field()
   readonly createdAt: string;
 
+  @Field()
   readonly updatedAt: string;
 }

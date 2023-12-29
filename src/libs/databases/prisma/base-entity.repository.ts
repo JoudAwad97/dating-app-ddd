@@ -1,7 +1,6 @@
 import { RepositoryPort } from 'src/libs/ports/repository.port';
 import { PrismaService } from 'src/shared/infrastructure/persistence/orm/prisma';
 import { ObjectLiteral } from 'src/libs/types';
-import { LoggerPort } from 'src/libs/ports/logger.port';
 import { Mapper } from 'src/libs/ddd/mapper.interface';
 import { Prisma } from '@prisma/client';
 import { AggregateRoot } from 'src/libs/ddd';
@@ -45,12 +44,9 @@ export abstract class BaseEntityRepository<
   protected modelName: Prisma.ModelName;
   protected readonly prismaService: PrismaService;
 
-  constructor(
-    protected readonly mapper: Mapper<Aggregate, DbModel>,
-    protected readonly logger: LoggerPort,
-  ) {}
+  constructor(protected readonly mapper: Mapper<Aggregate, DbModel>) {}
 
-  async findWithFilters<Include extends boolean = HasInclude<T>>(
+  async findManyWithFilters<Include extends boolean = HasInclude<T>>(
     filters: WhereType<T>,
     ...params: Include extends true
       ? fullOptionsWithInclude<T>
