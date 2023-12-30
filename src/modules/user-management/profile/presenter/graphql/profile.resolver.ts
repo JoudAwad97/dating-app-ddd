@@ -11,13 +11,13 @@ import { ProfileApplicationService } from '../../application/ports/profile.appli
 import { ProfileCreateDto } from '../dto/profile-create.dto';
 import { ProfileUpdateDto } from '../dto/profile-update.dto';
 import { ImageResponseDto } from '@src/modules/user-management/images/presenter/dto/image.dto';
-import { ImageApplicationService } from '@src/modules/user-management/images/application/ports/image.application.service.port';
+import { ImageApplicationServiceContract } from '../../application/contracts/image-applicaiton-service.contract';
 
 @Resolver(() => ProfileResponseDto)
 export class ProfileResolver {
   constructor(
     private readonly profileApplicationService: ProfileApplicationService,
-    private readonly imageApplicationService: ImageApplicationService,
+    private readonly imageApplicationService: ImageApplicationServiceContract,
   ) {}
 
   @Mutation(() => ProfileResponseDto)

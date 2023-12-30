@@ -17,14 +17,14 @@ const applicationServices: Provider[] = [
 ];
 const eventHandlers: Provider[] = [];
 
-const externalModules = [ImageModule];
+const dependingOnModules = [ImageModule];
 
 @Module({
   imports: [
     ProfileInfrastructure,
     GqlModule,
     PublisherModule,
-    ...externalModules,
+    ...dependingOnModules,
   ],
   controllers: [],
   providers: [...resolvers, ...applicationServices, ...eventHandlers],

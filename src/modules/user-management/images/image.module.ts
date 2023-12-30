@@ -6,11 +6,16 @@ import { GqlModule } from '@src/shared/presenter/gql/gql.module';
 import { PublisherModule } from '@src/shared/infrastructure/publisher/publisher.module';
 import { ImageInfrastructureModule } from './infrastructure/image-infrastructure.module';
 import { ImageCreatedEventHandler } from './application/event-handlers/image-created.event';
+import { ImageApplicationServiceContract } from '../profile/application/contracts/image-applicaiton-service.contract';
 
 const resolvers: Provider[] = [ImageResolver];
 const applicationService: Provider[] = [
   {
     provide: ImageApplicationService,
+    useExisting: ImageApplicationServiceImpl,
+  },
+  {
+    provide: ImageApplicationServiceContract,
     useExisting: ImageApplicationServiceImpl,
   },
   ImageApplicationServiceImpl,
@@ -22,6 +27,6 @@ const eventHandlers: Provider[] = [ImageCreatedEventHandler];
   imports: [GqlModule, PublisherModule, ImageInfrastructureModule],
   controllers: [],
   providers: [...resolvers, ...applicationService, ...eventHandlers],
-  exports: [ImageApplicationService],
+  exports: [ImageApplicationServiceContract],
 })
 export class ImageModule {}
