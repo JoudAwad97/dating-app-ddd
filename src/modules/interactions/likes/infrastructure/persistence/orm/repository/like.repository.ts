@@ -22,4 +22,26 @@ export class LikeRepositoryImpl
       createLogger(LikeRepositoryImpl.name),
     );
   }
+
+  async getLikeBySourceAndTargetProfileIds(
+    sourceProfileId: string,
+    targetProfileId: string,
+  ): Promise<LikeEntity> {
+    return this.prismaService.like
+      .findFirst({
+        where: {
+          OR: [
+            {
+              sourceProfileId: sourceProfileId,
+              targetProfileId: targetProfileId,
+            },
+            {
+              sourceProfileId: targetProfileId,
+              targetProfileId: sourceProfileId,
+            },
+          ],
+        },
+      })
+      .then((res) => (res ? this.mapper.toDomain(res) : null));
+  }
 }

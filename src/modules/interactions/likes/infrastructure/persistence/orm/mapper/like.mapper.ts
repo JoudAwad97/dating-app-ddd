@@ -10,6 +10,7 @@ import { InteractionStatus } from '@prisma/client';
 export class LikeMapperImpl extends LikeMapper {
   constructor() {
     super();
+    this.toDomain = this.toDomain.bind(this);
   }
 
   toPersistence(entity: LikeEntity): LikeDatabaseModel {

@@ -33,8 +33,8 @@ export class LikeEntity extends AggregateRoot<LikeProps> {
     return like;
   }
 
-  canCreateLike(sourceProfileId: string, targetProfileId: string): boolean {
-    if (sourceProfileId === targetProfileId) {
+  canCreateLike(): boolean {
+    if (this.getProps().sourceProfileId === this.getProps().targetProfileId) {
       throw LikeErrors.CanNotLikeYourself();
     }
     return true;
@@ -62,7 +62,5 @@ export class LikeEntity extends AggregateRoot<LikeProps> {
     );
   }
 
-  public validate(): void {
-    throw new Error('Method not implemented.');
-  }
+  public validate(): void {}
 }
