@@ -4,7 +4,7 @@ import { ImageApplicationService } from '../../application/ports/image.applicati
 import { CreateImageDto } from '../dto/image-create.dto';
 import { DeleteImageDto } from '../dto/image-delete.dto';
 
-@Resolver()
+@Resolver(() => ImageResponseDto)
 export class ImageResolver {
   constructor(
     private readonly imageApplicationService: ImageApplicationService,

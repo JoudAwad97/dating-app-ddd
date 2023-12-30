@@ -22,6 +22,12 @@ export class ImageApplicationServiceImpl implements ImageApplicationService {
     private readonly publisher: EventPublisher,
   ) {}
 
+  async getProfileImages(profileId: string): Promise<ImageResponseDto[]> {
+    return this.imageRepository
+      .imagesForProfile(profileId)
+      .then((res) => res.map(this.imageMapper.toResponse));
+  }
+
   async deleteImage(input: DeleteImageDto): Promise<boolean> {
     const { imageId } = input;
 

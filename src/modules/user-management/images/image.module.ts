@@ -22,5 +22,6 @@ const eventHandlers: Provider[] = [ImageCreatedEventHandler];
   imports: [GqlModule, PublisherModule, ImageInfrastructureModule],
   controllers: [],
   providers: [...resolvers, ...applicationService, ...eventHandlers],
+  exports: [ImageApplicationService],
 })
 export class ImageModule {}

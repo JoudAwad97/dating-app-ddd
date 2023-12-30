@@ -65,6 +65,7 @@ type ProfileResponseDto {
   bio: String
   createdAt: String!
   id: String!
+  images: [ImageResponseDto!]!
   name: String!
   updatedAt: String!
 }
@@ -76,5 +77,6 @@ input ProfileUpdateDto {
 }
 
 type Query {
+  getProfile(id: String!): ProfileResponseDto!
   hello: String!
 }

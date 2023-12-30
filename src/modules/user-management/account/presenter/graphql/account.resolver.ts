@@ -4,7 +4,7 @@ import { AccountResponseDto } from '../dto/account.dto';
 import { AccountCreateInput } from '../dto/account-create.dto';
 import { AccountUpdateDto } from '../dto/account-update.dto';
 
-@Resolver()
+@Resolver(() => AccountResponseDto)
 export class AccountResolver {
   constructor(
     private readonly accountApplicationService: AccountApplicationService,
