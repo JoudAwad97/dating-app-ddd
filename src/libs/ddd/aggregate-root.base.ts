@@ -25,6 +25,7 @@ export abstract class AggregateRoot<EntityProps> extends Entity<EntityProps> {
    * 2. EventEmitter
    * 3. RabbitMQ
    * 4. Kafka
+   * 5. EventBridge
    * @param eventPublisher
    * @param logger
    */

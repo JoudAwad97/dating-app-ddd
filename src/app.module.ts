@@ -7,6 +7,7 @@ import { LoggerModule } from './shared/infrastructure/logger/logger.module';
 import { RequestContextModule } from 'nestjs-request-context';
 import { ConfigModule } from '@nestjs/config';
 import { ProfileModule } from './modules/user-management/profile/profile.module';
+import { ImageModule } from './modules/user-management/images/image.module';
 
 const interceptors: Provider[] = [
   {
@@ -20,6 +21,7 @@ const interceptors: Provider[] = [
     AccountModule,
     ProfileModule,
     LoggerModule,
+    ImageModule,
     RequestContextModule,
     ConfigModule.forRoot(),
   ],

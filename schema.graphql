@@ -20,9 +20,36 @@ input AccountUpdateDto {
   password: String
 }
 
+input CreateImageDto {
+  profileId: String!
+  url: String!
+}
+
+input DeleteImageDto {
+  imageId: String!
+}
+
+type ImageResponseDto {
+  createdAt: String!
+  id: String!
+  profileId: String!
+  status: ImageStatus!
+  updatedAt: String!
+  url: String!
+}
+
+"""Image status"""
+enum ImageStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_VALIDATION
+}
+
 type Mutation {
   createAccount(input: AccountCreateInput!): AccountResponseDto!
+  createImage(input: CreateImageDto!): ImageResponseDto!
   createProfile(input: ProfileCreateDto!): ProfileResponseDto!
+  deleteImage(input: DeleteImageDto!): Boolean!
   updateAccount(input: AccountUpdateDto!): AccountResponseDto!
   updateProfile(input: ProfileUpdateDto!): ProfileResponseDto!
 }
