@@ -25,6 +25,11 @@ input CreateImageDto {
   url: String!
 }
 
+input CreateLikeDto {
+  sourceProfileId: String!
+  targetProfileId: String!
+}
+
 input DeleteImageDto {
   imageId: String!
 }
@@ -45,11 +50,22 @@ enum ImageStatus {
   PENDING_VALIDATION
 }
 
+"""Like interaction status"""
+enum LikeInteractionStatus {
+  RECIPROCATED
+  SENT
+}
+
+type LikeResponseDto {
+  status: LikeInteractionStatus!
+}
+
 type Mutation {
   createAccount(input: AccountCreateInput!): AccountResponseDto!
   createImage(input: CreateImageDto!): ImageResponseDto!
   createProfile(input: ProfileCreateDto!): ProfileResponseDto!
   deleteImage(input: DeleteImageDto!): Boolean!
+  likeProfile(input: CreateLikeDto!): LikeResponseDto!
   updateAccount(input: AccountUpdateDto!): AccountResponseDto!
   updateProfile(input: ProfileUpdateDto!): ProfileResponseDto!
 }

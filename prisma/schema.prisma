@@ -39,24 +39,24 @@ model Profile {
 }
 
 model Picture {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
   url       String
   status    PictureStatus
   profileId String
-  profile   Profile  @relation(fields: [profileId], references: [id])
+  profile   Profile       @relation(fields: [profileId], references: [id])
 }
 
 model Like {
-  id              String   @id @default(uuid())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  profileId       String
+  id              String            @id @default(uuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  status          InteractionStatus @default(SENT)
   sourceProfileId String
   targetProfileId String
-  targetProfile   Profile  @relation(fields: [targetProfileId], references: [id], name: "ProfileToIncomingLikes")
-  sourceProfile   Profile  @relation(fields: [sourceProfileId], references: [id], name: "ProfileToOutgoingLikes")
+  targetProfile   Profile           @relation(fields: [targetProfileId], references: [id], name: "ProfileToIncomingLikes")
+  sourceProfile   Profile           @relation(fields: [sourceProfileId], references: [id], name: "ProfileToOutgoingLikes")
 }
 
 model Dislike {
@@ -98,4 +98,9 @@ enum PictureStatus {
   PENDING_VALIDATION
   ACTIVE
   INACTIVE
+}
+
+enum InteractionStatus {
+  SENT
+  RECIPROCATED
 }
