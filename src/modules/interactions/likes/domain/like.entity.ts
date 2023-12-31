@@ -33,6 +33,13 @@ export class LikeEntity extends AggregateRoot<LikeProps> {
     return like;
   }
 
+  updateLikeStatusToDisliked() {
+    if (this.props.status === LikeInteractionStatus.DISLIKED) {
+      throw LikeErrors.LikeIsAlreadyDisliked();
+    }
+    this.props.status = LikeInteractionStatus.DISLIKED;
+  }
+
   canCreateLike(): boolean {
     if (this.getProps().sourceProfileId === this.getProps().targetProfileId) {
       throw LikeErrors.CanNotLikeYourself();

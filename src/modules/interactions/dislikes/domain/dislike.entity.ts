@@ -25,6 +25,7 @@ export class DislikeEntity extends AggregateRoot<DislikeProps> {
         sourceProfileId: props.sourceProfileId,
         targetProfileId: props.targetProfileId,
         aggregateId: id,
+        dislikeId: id,
       }),
     );
 

@@ -5,6 +5,7 @@ import { PublisherModule } from '@src/shared/infrastructure/publisher/publisher.
 import { GqlModule } from '@src/shared/presenter/gql/gql.module';
 import { DislikeResolver } from './presenter/graphql/dislike.resolver';
 import { DislikeApplicationService } from './application/port/dislike.application.service.port';
+import { DislikeCreatedEventHandler } from './application/event-handlers/dislike-created.event.handler';
 
 const applicationService: Provider[] = [
   {
@@ -14,7 +15,7 @@ const applicationService: Provider[] = [
   DislikeApplicationServiceImpl,
 ];
 
-const eventHandlers: Provider[] = [];
+const eventHandlers: Provider[] = [DislikeCreatedEventHandler];
 
 const resolvers: Provider[] = [DislikeResolver];
 

@@ -8,12 +8,19 @@ import { GqlModule } from '@src/shared/presenter/gql/gql.module';
 import { LikeUpgradedToReciprocatedEventHandler } from './application/event-handlers/like-upgraded-to-reciprocated.event';
 import { LikeInteractionEventHandler } from './application/event-handlers/like-created.event';
 import { ProfileModule } from '@src/modules/user-management/profile/profile.module';
+import { LikeMessageApplicationService } from './application/ports/like-message.application.service.port';
+import { LikeListener } from './presenter/message/like.listener';
 
 const resolvers: Provider[] = [LikeResolver];
 const applicationService: Provider[] = [
   {
     provide: LikeApplicationService,
     useExisting: LikeApplicationServiceImpl,
+  },
+  {
+    // consider using a different "Application service" for this port
+    provide: LikeMessageApplicationService,
+    useExisting: LikeApplicationService,
   },
   LikeApplicationServiceImpl,
 ];
@@ -24,6 +31,7 @@ const eventHandlers: Provider[] = [
 ];
 
 const externalModules = [ProfileModule];
+const listeners = [LikeListener];
 
 @Module({
   imports: [
@@ -33,7 +41,7 @@ const externalModules = [ProfileModule];
     ...externalModules,
   ],
   providers: [...resolvers, ...applicationService, ...eventHandlers],
-  controllers: [],
+  controllers: [...listeners],
   exports: [],
 })
 export class LikeModule {}

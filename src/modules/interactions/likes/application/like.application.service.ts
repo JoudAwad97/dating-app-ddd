@@ -11,9 +11,13 @@ import { ProfilePaginatedResponseDto } from '@src/modules/user-management/profil
 import { WhoLikesMeDto } from '../presenter/dto/who-likes-me.dto';
 import { ProfileApplicationServiceContract } from './contract/profile-application-service.contract';
 import paginationBuilder from '@src/libs/utils/pagination.util';
+import { LikeMessageApplicationService } from './ports/like-message.application.service.port';
+import { DislikeCreatedIntegrationEvent } from '@src/shared/infrastructure/publisher/integration-events/dislike-created.event.integration';
 
 @Injectable()
-export class LikeApplicationServiceImpl implements LikeApplicationService {
+export class LikeApplicationServiceImpl
+  implements LikeApplicationService, LikeMessageApplicationService
+{
   private readonly logger = createLogger(LikeApplicationServiceImpl.name);
 
   constructor(
@@ -22,6 +26,22 @@ export class LikeApplicationServiceImpl implements LikeApplicationService {
     private readonly publisher: EventPublisher,
     private readonly profileApplicationService: ProfileApplicationServiceContract,
   ) {}
+
+  async handleDislikeCreatedEvent(event: DislikeCreatedIntegrationEvent) {
+    // check if there is a dislike between profiles and change the status to "DISCONNECTED"
+    const { sourceProfileId, targetProfileId } = event;
+
+    const like =
+      await this.likeRepository.getLikeBySourceAndTargetProfilesByIds(
+        sourceProfileId,
+        targetProfileId,
+      );
+
+    if (like) {
+      like.updateLikeStatusToDisliked();
+      await this.likeRepository.update(like);
+    }
+  }
 
   async whoLikesMe(input: WhoLikesMeDto): Promise<ProfilePaginatedResponseDto> {
     const { profileId } = input;

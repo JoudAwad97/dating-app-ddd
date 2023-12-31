@@ -103,4 +103,5 @@ enum PictureStatus {
 enum InteractionStatus {
   SENT
   RECIPROCATED
+  DISLIKED
 }

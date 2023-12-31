@@ -34,6 +34,8 @@ export class LikeMapperImpl extends LikeMapper {
         return LikeInteractionStatus.SENT;
       case InteractionStatus.RECIPROCATED:
         return LikeInteractionStatus.RECIPROCATED;
+      case InteractionStatus.DISLIKED:
+        return LikeInteractionStatus.DISLIKED;
       default:
         throw new Error(`Invalid status: ${status}`);
     }

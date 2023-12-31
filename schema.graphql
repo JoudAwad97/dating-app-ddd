@@ -65,6 +65,7 @@ enum ImageStatus {
 
 """Like interaction status"""
 enum LikeInteractionStatus {
+  DISLIKED
   RECIPROCATED
   SENT
 }
