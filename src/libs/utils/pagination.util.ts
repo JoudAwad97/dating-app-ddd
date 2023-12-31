@@ -35,13 +35,18 @@ class PaginationUtils {
     //       (paginating backwards) or the last element in the array (paginating forwards).
     const dataStart = isBackward && hasNextItem ? 1 : 0;
     const items = data.slice(dataStart, dataStart + Math.abs(take));
+    // if we are using only the "data" for pagination, we can ignore the following code
+    cursorSourceData = cursorSourceData.slice(
+      dataStart,
+      dataStart + Math.abs(take),
+    );
 
     // Get the first and last items in the set so we can provide the start/end cursors
     // to the client and allow them to easily move forwards/backwards through the list.
     // const firstNode = cursorBuilderData[0];
     // if we are using the "items" array instead of the cursorSourceData array, we can use the following code
     // const lastNode = data[data.length - 1];
-    const lastNode = cursorSourceData[cursorSourceData.length - 2];
+    const lastNode = cursorSourceData[cursorSourceData.length - 1];
 
     return {
       data: items,
