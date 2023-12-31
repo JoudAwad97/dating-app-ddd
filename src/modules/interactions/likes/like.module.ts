@@ -10,6 +10,7 @@ import { LikeInteractionEventHandler } from './application/event-handlers/like-c
 import { ProfileModule } from '@src/modules/user-management/profile/profile.module';
 import { LikeMessageApplicationService } from './application/ports/like-message.application.service.port';
 import { LikeListener } from './presenter/messages/like.listener';
+import { ReportListener } from './presenter/messages/report.listener';
 
 const resolvers: Provider[] = [LikeResolver];
 const applicationService: Provider[] = [
@@ -31,7 +32,7 @@ const eventHandlers: Provider[] = [
 ];
 
 const externalModules = [ProfileModule];
-const listeners = [LikeListener];
+const listeners = [LikeListener, ReportListener];
 
 @Module({
   imports: [
