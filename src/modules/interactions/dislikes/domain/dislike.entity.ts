@@ -15,7 +15,6 @@ export class DislikeEntity extends AggregateRoot<DislikeProps> {
       props: {
         sourceProfileId: props.sourceProfileId,
         targetProfileId: props.targetProfileId,
-        reason: props.reason,
       },
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -30,6 +29,10 @@ export class DislikeEntity extends AggregateRoot<DislikeProps> {
     );
 
     return dislike;
+  }
+
+  canCreateNewDislikeBetweenProfiles() {
+    throw DislikeErrors.CanNotCreateNewDislikeBetweenProfiles();
   }
 
   private canDislikeBeCreated() {

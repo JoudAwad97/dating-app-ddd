@@ -13,7 +13,6 @@ export class DislikeMapperImpl extends DislikeMapper {
     const copy = entity.getProps();
     const record: DislikeDatabaseModel = {
       id: copy.id,
-      reason: copy.reason,
       sourceProfileId: copy.sourceProfileId,
       targetProfileId: copy.targetProfileId,
       createdAt: copy.createdAt,
@@ -26,7 +25,6 @@ export class DislikeMapperImpl extends DislikeMapper {
     const dislike = new DislikeEntity({
       id: record.id,
       props: {
-        reason: record.reason,
         sourceProfileId: record.sourceProfileId,
         targetProfileId: record.targetProfileId,
       },
@@ -43,7 +41,6 @@ export class DislikeMapperImpl extends DislikeMapper {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     });
-    response.reason = props.reason;
     response.sourceProfileId = props.sourceProfileId;
     response.targetProfileId = props.targetProfileId;
     return response;

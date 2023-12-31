@@ -26,4 +26,26 @@ export class DislikeRepositoryImpl
       createLogger(DislikeRepositoryImpl.name),
     );
   }
+
+  async findDislikeBetweenProfiles(
+    sourceProfileId: string,
+    targetProfileId: string,
+  ): Promise<DislikeEntity | null> {
+    return this.prismaService.dislike
+      .findFirst({
+        where: {
+          OR: [
+            {
+              sourceProfileId,
+              targetProfileId,
+            },
+            {
+              targetProfileId: sourceProfileId,
+              sourceProfileId: targetProfileId,
+            },
+          ],
+        },
+      })
+      .then((res) => (res ? this.mapper.toDomain(res) : null));
+  }
 }

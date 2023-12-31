@@ -20,6 +20,11 @@ input AccountUpdateDto {
   password: String
 }
 
+input CreateDislikeDto {
+  sourceProfileId: String!
+  targetProfileId: String!
+}
+
 input CreateImageDto {
   profileId: String!
   url: String!
@@ -32,6 +37,14 @@ input CreateLikeDto {
 
 input DeleteImageDto {
   imageId: String!
+}
+
+type DislikeResponseDto {
+  createdAt: String!
+  id: String!
+  sourceProfileId: String!
+  targetProfileId: String!
+  updatedAt: String!
 }
 
 type ImageResponseDto {
@@ -65,6 +78,7 @@ type Mutation {
   createImage(input: CreateImageDto!): ImageResponseDto!
   createProfile(input: ProfileCreateDto!): ProfileResponseDto!
   deleteImage(input: DeleteImageDto!): Boolean!
+  dislikeProfile(input: CreateDislikeDto!): DislikeResponseDto!
   likeProfile(input: CreateLikeDto!): LikeResponseDto!
   updateAccount(input: AccountUpdateDto!): AccountResponseDto!
   updateProfile(input: ProfileUpdateDto!): ProfileResponseDto!
