@@ -22,6 +22,10 @@ export class ProfileApplicationServiceImpl
     private readonly publisher: EventPublisher,
   ) {}
 
+  getProfileByIds(profileIds: string[]): Promise<ProfileResponseDto[]> {
+    return this.profileRepository.getProfilesByIds(profileIds);
+  }
+
   async getProfile(id: string): Promise<ProfileResponseDto> {
     this.logger.log(`ProfileApplicationServiceImpl.getProfile`);
 

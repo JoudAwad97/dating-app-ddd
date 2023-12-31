@@ -7,4 +7,8 @@ export abstract class ProfileMapper extends Mapper<
   ProfileEntity,
   ProfileDatabaseModel,
   ProfileResponseDto
-> {}
+> {
+  abstract toResponseFromPersistence(
+    record: ProfileDatabaseModel,
+  ): ProfileResponseDto;
+}

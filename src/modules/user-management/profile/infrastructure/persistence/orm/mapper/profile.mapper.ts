@@ -7,6 +7,18 @@ import {
 } from '../schema/profile.schema';
 
 export class ProfileMapperImpl extends ProfileMapper {
+  toResponseFromPersistence(record: ProfileDatabaseModel): ProfileResponseDto {
+    const response = new ProfileResponseDto({
+      id: record.id,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    });
+    response.name = record.name;
+    response.bio = record.bio;
+    response.accountId = record.accountId;
+    return response;
+  }
+
   toPersistence(entity: ProfileEntity): ProfileDatabaseModel {
     const copy = entity.getProps();
     const record: ProfileDatabaseModel = {

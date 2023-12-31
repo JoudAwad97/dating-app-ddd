@@ -7,6 +7,7 @@ import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma
 import { Prisma } from '@prisma/client';
 import { ProfileMapper } from '../mapper/profile.mapper.port';
 import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
+import { ProfileResponseDto } from '@src/modules/user-management/profile/presenter/dto/profile.dto';
 
 @Injectable()
 export class ProfileRepositoryImpl
@@ -25,5 +26,17 @@ export class ProfileRepositoryImpl
     this.prismaService = new PrismaService(
       createLogger(ProfileRepositoryImpl.name),
     );
+  }
+
+  async getProfilesByIds(ids: string[]): Promise<ProfileResponseDto[]> {
+    return this.prismaService.profile
+      .findMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      })
+      .then((res) => res.map(this.mapper.toResponseFromPersistence));
   }
 }

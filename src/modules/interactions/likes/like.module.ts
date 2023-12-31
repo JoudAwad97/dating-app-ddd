@@ -7,6 +7,7 @@ import { PublisherModule } from '@src/shared/infrastructure/publisher/publisher.
 import { GqlModule } from '@src/shared/presenter/gql/gql.module';
 import { LikeUpgradedToReciprocatedEventHandler } from './application/event-handlers/like-upgraded-to-reciprocated.event';
 import { LikeInteractionEventHandler } from './application/event-handlers/like-created.event';
+import { ProfileModule } from '@src/modules/user-management/profile/profile.module';
 
 const resolvers: Provider[] = [LikeResolver];
 const applicationService: Provider[] = [
@@ -22,8 +23,15 @@ const eventHandlers: Provider[] = [
   LikeInteractionEventHandler,
 ];
 
+const externalModules = [ProfileModule];
+
 @Module({
-  imports: [PublisherModule, GqlModule, LikeInfrastructureModule],
+  imports: [
+    PublisherModule,
+    GqlModule,
+    LikeInfrastructureModule,
+    ...externalModules,
+  ],
   providers: [...resolvers, ...applicationService, ...eventHandlers],
   controllers: [],
   exports: [],

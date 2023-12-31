@@ -70,10 +70,29 @@ type Mutation {
   updateProfile(input: ProfileUpdateDto!): ProfileResponseDto!
 }
 
+type PageInfo {
+  """
+  The total number of items in the collection, not just the current page.
+  """
+  count: Int!
+
+  """
+  The cursor of the last item in the list. Use this to get the next page.
+  """
+  cursor: String
+  hasNextPage: Boolean!
+  take: Float!
+}
+
 input ProfileCreateDto {
   accountId: String!
   bio: String
   name: String!
+}
+
+type ProfilePaginatedResponseDto {
+  data: [ProfileResponseDto!]!
+  pageInfo: PageInfo!
 }
 
 type ProfileResponseDto {
@@ -95,4 +114,11 @@ input ProfileUpdateDto {
 type Query {
   getProfile(id: String!): ProfileResponseDto!
   hello: String!
+  whoLikesMe(input: WhoLikesMeDto!): ProfilePaginatedResponseDto!
+}
+
+input WhoLikesMeDto {
+  cursor: String
+  profileId: String!
+  take: Float!
 }

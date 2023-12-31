@@ -7,6 +7,10 @@ import { LikeMapper } from '../infrastructure/persistence/orm/mapper/like.mapper
 import { EventPublisher } from '@src/libs/ports/event-publisher.port';
 import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 import { LikeEntity } from '../domain/like.entity';
+import { ProfilePaginatedResponseDto } from '@src/modules/user-management/profile/presenter/dto/profile.dto';
+import { WhoLikesMeDto } from '../presenter/dto/who-likes-me.dto';
+import { ProfileApplicationServiceContract } from './contract/profile-application-service.contract';
+import paginationBuilder from '@src/libs/utils/pagination.util';
 
 @Injectable()
 export class LikeApplicationServiceImpl implements LikeApplicationService {
@@ -16,15 +20,48 @@ export class LikeApplicationServiceImpl implements LikeApplicationService {
     private readonly likeRepository: LikeRepository,
     private readonly likeMapper: LikeMapper,
     private readonly publisher: EventPublisher,
+    private readonly profileApplicationService: ProfileApplicationServiceContract,
   ) {}
+
+  async whoLikesMe(input: WhoLikesMeDto): Promise<ProfilePaginatedResponseDto> {
+    const { profileId } = input;
+
+    const { take, cursor } = paginationBuilder.getQueryArgs(input);
+
+    const [likes, count] = await Promise.all([
+      this.likeRepository.getReceivedLikesByProfileId(profileId, take, cursor, {
+        id: 'asc',
+      }),
+      this.likeRepository.countReceivedLikesByProfileId(profileId),
+    ]);
+
+    const profileIds: string[] = [];
+    const likesIds: { id: string }[] = [];
+
+    likes.forEach((like) => {
+      profileIds.push(like.getProps().sourceProfileId);
+      likesIds.push({ id: like.getProps().id });
+    });
+
+    const data =
+      await this.profileApplicationService.getProfileByIds(profileIds);
+
+    return paginationBuilder.buildPaginationOutputGenerator(
+      data,
+      likesIds,
+      count,
+      input,
+    );
+  }
 
   async likeAnotherProfile(input: CreateLikeDto): Promise<LikeResponseDto> {
     const { sourceProfileId, targetProfileId } = input;
 
-    const like = await this.likeRepository.getLikeBySourceAndTargetProfileIds(
-      sourceProfileId,
-      targetProfileId,
-    );
+    const like =
+      await this.likeRepository.getLikeBySourceAndTargetProfilesByIds(
+        sourceProfileId,
+        targetProfileId,
+      );
 
     // if we have a like then convert it into a reciprocated like
     if (like) {
