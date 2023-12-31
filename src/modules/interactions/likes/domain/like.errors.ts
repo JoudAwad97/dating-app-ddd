@@ -1,8 +1,12 @@
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+} from '@nestjs/common';
 
 export class LikeErrors {
   static LikeIsAlreadyReciprocated(): Error {
-    return new BadRequestException('Like is already reciprocated');
+    return new ConflictException('Like is already reciprocated');
   }
 
   static InvalidLikeInteraction(): Error {
@@ -10,6 +14,6 @@ export class LikeErrors {
   }
 
   static CanNotLikeYourself(): Error {
-    return new BadRequestException('Can not like yourself');
+    return new ForbiddenException('Can not like yourself');
   }
 }
