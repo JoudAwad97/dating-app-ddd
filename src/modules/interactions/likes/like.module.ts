@@ -9,7 +9,7 @@ import { LikeUpgradedToReciprocatedEventHandler } from './application/event-hand
 import { LikeInteractionEventHandler } from './application/event-handlers/like-created.event';
 import { ProfileModule } from '@src/modules/user-management/profile/profile.module';
 import { LikeMessageApplicationService } from './application/ports/like-message.application.service.port';
-import { LikeListener } from './presenter/message/like.listener';
+import { LikeListener } from './presenter/messages/like.listener';
 
 const resolvers: Provider[] = [LikeResolver];
 const applicationService: Provider[] = [

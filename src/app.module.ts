@@ -10,6 +10,7 @@ import { ProfileModule } from './modules/user-management/profile/profile.module'
 import { ImageModule } from './modules/user-management/images/image.module';
 import { LikeModule } from './modules/interactions/likes/like.module';
 import { DislikesModule } from './modules/interactions/dislikes/dislikes.module';
+import { ReportsModule } from './modules/interactions/reports/reports.module';
 
 const interceptors: Provider[] = [
   {
@@ -25,6 +26,7 @@ const systemModules = [
   ImageModule,
   LikeModule,
   DislikesModule,
+  ReportsModule,
 ];
 
 const externalModules = [RequestContextModule];

@@ -35,6 +35,12 @@ input CreateLikeDto {
   targetProfileId: String!
 }
 
+input CreateReportDto {
+  reason: String!
+  sourceProfileId: String!
+  targetProfileId: String!
+}
+
 input DeleteImageDto {
   imageId: String!
 }
@@ -81,6 +87,7 @@ type Mutation {
   deleteImage(input: DeleteImageDto!): Boolean!
   dislikeProfile(input: CreateDislikeDto!): DislikeResponseDto!
   likeProfile(input: CreateLikeDto!): LikeResponseDto!
+  reportProfile(input: CreateReportDto!): ReportResponseDto!
   updateAccount(input: AccountUpdateDto!): AccountResponseDto!
   updateProfile(input: ProfileUpdateDto!): ProfileResponseDto!
 }
@@ -130,6 +137,15 @@ type Query {
   getProfile(id: String!): ProfileResponseDto!
   hello: String!
   whoLikesMe(input: WhoLikesMeDto!): ProfilePaginatedResponseDto!
+}
+
+type ReportResponseDto {
+  createdAt: String!
+  id: String!
+  reason: String!
+  sourceProfileId: String!
+  targetProfileId: String!
+  updatedAt: String!
 }
 
 input WhoLikesMeDto {
