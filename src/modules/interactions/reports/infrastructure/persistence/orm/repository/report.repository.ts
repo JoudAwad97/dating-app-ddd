@@ -5,7 +5,6 @@ import { ReportDatabaseModel } from '../schema/report.schema';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma';
 import { ReportMapper } from '../mapper/report.mapper.port';
-import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 import { ReportRepository } from './report.repository.port';
 
 @Injectable()
@@ -18,9 +17,7 @@ export class ReportRepositoryImpl
 
   constructor(protected readonly mapper: ReportMapper) {
     super(mapper);
-    this.prismaService = new PrismaService(
-      createLogger(ReportRepositoryImpl.name),
-    );
+    this.prismaService = new PrismaService();
   }
 
   async getReportBySourceAndTargetProfiles(

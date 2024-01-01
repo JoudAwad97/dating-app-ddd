@@ -18,9 +18,7 @@ export class ImageRepositoryImpl
 
   constructor(protected readonly mapper: ImageMapper) {
     super(mapper);
-    this.prismaService = new PrismaService(
-      createLogger(ImageRepositoryImpl.name),
-    );
+    this.prismaService = new PrismaService();
   }
 
   async imagesCountPerProfile(profileId: string): Promise<number> {

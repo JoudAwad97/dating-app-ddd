@@ -6,7 +6,6 @@ import { LikeRepository } from './like.repository.mapper';
 import { InteractionStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma';
 import { LikeMapper } from '../mapper/like.mapper.port';
-import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 
 @Injectable()
 export class LikeRepositoryImpl
@@ -18,9 +17,7 @@ export class LikeRepositoryImpl
 
   constructor(protected readonly mapper: LikeMapper) {
     super(mapper);
-    this.prismaService = new PrismaService(
-      createLogger(LikeRepositoryImpl.name),
-    );
+    this.prismaService = new PrismaService();
   }
 
   async countReceivedLikesByProfileId(profileId: string): Promise<number> {

@@ -6,7 +6,6 @@ import { AccountRepository } from './account.repository.port';
 import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma';
 import { Prisma } from '@prisma/client';
 import { AccountMapper } from '../mapper/account.mapper.port';
-import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 
 @Injectable()
 export class AccountRepositoryImpl
@@ -22,9 +21,7 @@ export class AccountRepositoryImpl
 
   constructor(protected readonly mapper: AccountMapper) {
     super(mapper);
-    this.prismaService = new PrismaService(
-      createLogger(AccountRepositoryImpl.name),
-    );
+    this.prismaService = new PrismaService();
   }
   async updateAccountProfileIds(
     accountId: string,

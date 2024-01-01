@@ -6,7 +6,6 @@ import { DislikeRepository } from './dislike.repository.port';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma';
 import { DislikeMapper } from '../mapper/dislike.mapper.port';
-import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 
 @Injectable()
 export class DislikeRepositoryImpl
@@ -22,9 +21,7 @@ export class DislikeRepositoryImpl
 
   constructor(protected readonly mapper: DislikeMapper) {
     super(mapper);
-    this.prismaService = new PrismaService(
-      createLogger(DislikeRepositoryImpl.name),
-    );
+    this.prismaService = new PrismaService();
   }
 
   async findDislikeBetweenProfiles(

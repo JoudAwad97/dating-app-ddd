@@ -7,6 +7,7 @@ import { ProfileApplicationService } from './application/ports/profile.applicati
 import { PublisherModule } from '@src/shared/infrastructure/publisher/publisher.module';
 import { ImageModule } from '../images/image.module';
 import { ProfileApplicationServiceContract } from '@src/modules/interactions/likes/application/contract/profile-application-service.contract';
+import { ChatProfileApplicationServiceContract } from '@src/modules/chat-management/chats/application/contracts/profile-application-service.contract';
 
 const resolvers: Provider[] = [ProfileResolver];
 const applicationServices: Provider[] = [
@@ -16,6 +17,10 @@ const applicationServices: Provider[] = [
   },
   {
     provide: ProfileApplicationServiceContract,
+    useExisting: ProfileApplicationServiceImpl,
+  },
+  {
+    provide: ChatProfileApplicationServiceContract,
     useExisting: ProfileApplicationServiceImpl,
   },
   ProfileApplicationServiceImpl,
@@ -33,6 +38,9 @@ const dependingOnModules = [ImageModule];
   ],
   controllers: [],
   providers: [...resolvers, ...applicationServices, ...eventHandlers],
-  exports: [ProfileApplicationServiceContract],
+  exports: [
+    ProfileApplicationServiceContract,
+    ChatProfileApplicationServiceContract,
+  ],
 })
 export class ProfileModule {}

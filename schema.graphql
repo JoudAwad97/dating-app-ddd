@@ -20,6 +20,33 @@ input AccountUpdateDto {
   password: String
 }
 
+type ChatResponseDto {
+  createdAt: String!
+  id: String!
+  name: String!
+  status: ChatStatus!
+  type: ChatTypes!
+  updatedAt: String!
+}
+
+"""Chat status"""
+enum ChatStatus {
+  ACTIVE
+  INACTIVE
+}
+
+"""Chat types"""
+enum ChatTypes {
+  GROUP
+  PRIVATE
+}
+
+input ChatsCreateDto {
+  name: String!
+  ownerProfileId: String!
+  type: ChatTypes!
+}
+
 input CreateDislikeDto {
   sourceProfileId: String!
   targetProfileId: String!
@@ -82,6 +109,7 @@ type LikeResponseDto {
 
 type Mutation {
   createAccount(input: AccountCreateInput!): AccountResponseDto!
+  createChat(input: ChatsCreateDto!): ChatResponseDto!
   createImage(input: CreateImageDto!): ImageResponseDto!
   createProfile(input: ProfileCreateDto!): ProfileResponseDto!
   deleteImage(input: DeleteImageDto!): Boolean!

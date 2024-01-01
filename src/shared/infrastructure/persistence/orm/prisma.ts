@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
-import { ILogger } from 'src/libs/ports/logger.port';
+import { createLogger } from '../../logger/logger.factory';
 
 @Injectable()
 export class PrismaService
@@ -10,7 +10,8 @@ export class PrismaService
   >
   implements OnModuleInit, OnModuleDestroy
 {
-  public constructor(private readonly logger: ILogger) {
+  private readonly logger = createLogger(PrismaService.name);
+  public constructor() {
     super({
       log: [
         { emit: 'event', level: 'query' },

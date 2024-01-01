@@ -22,6 +22,19 @@ export class ProfileApplicationServiceImpl
     private readonly publisher: EventPublisher,
   ) {}
 
+  async validateProfileForChatCreation(profileId: string): Promise<boolean> {
+    const profile = await this.profileRepository.findById(profileId);
+
+    if (!profile) {
+      throw ProfileErrors.ProfileNotFound();
+    }
+
+    // consider adding more validation in here, like checking for profile status, etc...
+    // or adding more logic to the profile entity to check for this
+
+    return true;
+  }
+
   getProfileByIds(profileIds: string[]): Promise<ProfileResponseDto[]> {
     return this.profileRepository.getProfilesByIds(profileIds);
   }
