@@ -15,6 +15,20 @@ export class ChatsMapperImpl extends ChatsMapper {
   constructor() {
     super();
     this.toDomain = this.toDomain.bind(this);
+    this.mapPersistenceToResponse = this.mapPersistenceToResponse.bind(this);
+  }
+
+  mapPersistenceToResponse(record: ChatDatabaseModel): ChatResponseDto {
+    const props = record;
+    const response = new ChatResponseDto({
+      id: record.id,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    });
+    response.name = props.name;
+    response.status = this.mapChatStatusFromDatabaseToDomain(props.status);
+    response.type = this.mapChatTypeFromDatabaseToDomain(props.type);
+    return response;
   }
 
   toPersistence(entity: ChatEntity): ChatDatabaseModel {

@@ -5,7 +5,10 @@ import { ChatService } from '../domain/chats/chat.service';
 import { ChatMemberRole } from '../domain/members/enums/chat-member-role.enum';
 import { MembersEntity } from '../domain/members/members.entity';
 import { ChatsCreateDto } from '../presenter/dto/input/chats-create.dto';
-import { ChatResponseDto } from '../presenter/dto/output/chats.dto';
+import {
+  ChatPaginatedResponseDto,
+  ChatResponseDto,
+} from '../presenter/dto/output/chats.dto';
 import { ChatProfileApplicationServiceContract } from './contracts/profile-application-service.contract';
 import { ChatsApplicationService } from './ports/chats.application.service.port';
 import { ChatsRepository } from '../infrastructure/orm/chats/repository/chats.repository.port';
@@ -23,6 +26,7 @@ import paginationBuilder from '@src/libs/utils/pagination.util';
 import { AssignMemberToChatDto } from '../presenter/dto/input/assign-member.dto';
 import { ChatMembersErrors } from '../domain/members/members.errors';
 import { OrderByTypes } from '@src/libs/databases/prisma/pagination.types';
+import { ChatQueryDto } from '../presenter/dto/input/paginated-chat.dto';
 
 @Injectable()
 export class ChatsApplicationServiceImpl implements ChatsApplicationService {
@@ -37,6 +41,32 @@ export class ChatsApplicationServiceImpl implements ChatsApplicationService {
     private readonly prismaService: PrismaService,
     private readonly publisher: EventPublisher,
   ) {}
+
+  async getChatsForProfile(
+    input: ChatQueryDto,
+  ): Promise<ChatPaginatedResponseDto> {
+    const { profileId } = input;
+
+    const { take, cursor } = paginationBuilder.getQueryArgs(input);
+
+    const [chats, count] = await Promise.all([
+      this.chatRepository.getProfileChats(profileId, {
+        take,
+        cursor,
+        orderBy: {
+          id: OrderByTypes.ASC,
+        },
+      }),
+      this.chatRepository.countProfileChats(profileId),
+    ]);
+
+    return paginationBuilder.buildPaginationOutputGenerator<ChatResponseDto>(
+      chats,
+      chats,
+      count,
+      input,
+    );
+  }
 
   async addMemberToChat(
     input: AssignMemberToChatDto,

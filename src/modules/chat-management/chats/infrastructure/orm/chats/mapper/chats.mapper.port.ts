@@ -7,4 +7,6 @@ export abstract class ChatsMapper extends Mapper<
   ChatEntity,
   ChatDatabaseModel,
   ChatResponseDto
-> {}
+> {
+  abstract mapPersistenceToResponse(record: ChatDatabaseModel): ChatResponseDto;
+}

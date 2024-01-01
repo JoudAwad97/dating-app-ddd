@@ -26,6 +26,17 @@ input AssignMemberToChatDto {
   profileId: String!
 }
 
+type ChatPaginatedResponseDto {
+  data: [ChatResponseDto!]!
+  pageInfo: PageInfo!
+}
+
+input ChatQueryDto {
+  cursor: String
+  profileId: String!
+  take: Float!
+}
+
 type ChatResponseDto {
   createdAt: String!
   id: String!
@@ -181,6 +192,7 @@ input ProfileUpdateDto {
 }
 
 type Query {
+  chats(input: ChatQueryDto!): ChatPaginatedResponseDto!
   discovery(input: DiscoveryQueryDto!): ProfilePaginatedResponseDto!
   getProfile(id: String!): ProfileResponseDto!
   hello: String!
