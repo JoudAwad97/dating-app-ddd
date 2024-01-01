@@ -20,6 +20,12 @@ input AccountUpdateDto {
   password: String
 }
 
+input AssignMemberToChatDto {
+  chatId: String!
+  ownerId: String!
+  profileId: String!
+}
+
 type ChatResponseDto {
   createdAt: String!
   id: String!
@@ -109,6 +115,7 @@ type LikeResponseDto {
 }
 
 type Mutation {
+  addMemberToChat(input: AssignMemberToChatDto!): ChatResponseDto!
   createAccount(input: AccountCreateInput!): AccountResponseDto!
   createChat(input: ChatsCreateDto!): ChatResponseDto!
   createImage(input: CreateImageDto!): ImageResponseDto!

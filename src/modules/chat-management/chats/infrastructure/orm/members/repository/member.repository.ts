@@ -24,6 +24,20 @@ export class MembersRepositoryImpl
     this.prismaService = new PrismaService();
   }
 
+  async findByChatIdAndProfileId(
+    chatId: string,
+    profileId: string,
+  ): Promise<MembersEntity | null> {
+    return this.prismaService.chatMember
+      .findFirst({
+        where: {
+          chatId,
+          profileId,
+        },
+      })
+      .then((res) => (res ? this.mapper.toDomain(res) : null));
+  }
+
   async countChatMembers(chatId: string): Promise<number> {
     return this.prismaService.chatMember.count({
       where: {

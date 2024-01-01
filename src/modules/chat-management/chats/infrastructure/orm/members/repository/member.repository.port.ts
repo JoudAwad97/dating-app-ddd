@@ -10,4 +10,8 @@ export abstract class MembersRepository extends RepositoryPort<MembersEntity> {
     orderBy: Prisma.ChatMemberOrderByWithRelationInput,
   ): Promise<MembersEntity[]>;
   abstract countChatMembers(chatId: string): Promise<number>;
+  abstract findByChatIdAndProfileId(
+    chatId: string,
+    profileId: string,
+  ): Promise<MembersEntity | null>;
 }

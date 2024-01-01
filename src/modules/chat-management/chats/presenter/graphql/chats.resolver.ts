@@ -10,6 +10,7 @@ import { ChatsApplicationService } from '../../application/ports/chats.applicati
 import { ChatsCreateDto } from '../dto/input/chats-create.dto';
 import { ProfilePaginatedResponseDto } from '@src/modules/user-management/profile/presenter/dto/profile.dto';
 import { PaginatedQueryRequestDto } from '@src/libs/api/request/paginated-query.request.dto';
+import { AssignMemberToChatDto } from '../dto/input/assign-member.dto';
 
 @Resolver(() => ChatResponseDto)
 export class ChatsResolver {
@@ -22,6 +23,13 @@ export class ChatsResolver {
     @Args('input') input: ChatsCreateDto,
   ): Promise<ChatResponseDto> {
     return this.chatApplicationService.createChat(input);
+  }
+
+  @Mutation(() => ChatResponseDto)
+  async addMemberToChat(
+    @Args('input') input: AssignMemberToChatDto,
+  ): Promise<ChatResponseDto> {
+    return this.chatApplicationService.addMemberToChat(input);
   }
 
   @ResolveField(() => ProfilePaginatedResponseDto)

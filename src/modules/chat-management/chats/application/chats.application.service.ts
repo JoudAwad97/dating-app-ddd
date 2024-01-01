@@ -20,6 +20,8 @@ import {
   ProfileResponseDto,
 } from '@src/modules/user-management/profile/presenter/dto/profile.dto';
 import paginationBuilder from '@src/libs/utils/pagination.util';
+import { AssignMemberToChatDto } from '../presenter/dto/input/assign-member.dto';
+import { ChatMembersErrors } from '../domain/members/members.errors';
 
 @Injectable()
 export class ChatsApplicationServiceImpl implements ChatsApplicationService {
@@ -34,6 +36,53 @@ export class ChatsApplicationServiceImpl implements ChatsApplicationService {
     private readonly prismaService: PrismaService,
     private readonly publisher: EventPublisher,
   ) {}
+
+  async addMemberToChat(
+    input: AssignMemberToChatDto,
+  ): Promise<ChatResponseDto> {
+    const { chatId, profileId, ownerId } = input;
+
+    const [profileIsValid, chat, profileAlreadyInChat, ownerChatMember] =
+      await Promise.all([
+        this.profileApplicationService.validateProfileForChat(profileId),
+        this.chatRepository.findById(chatId),
+        this.memberRepository.findByChatIdAndProfileId(chatId, profileId),
+        this.memberRepository.findByChatIdAndProfileId(chatId, ownerId),
+      ]);
+
+    if (!chat) {
+      throw ChatErrors.ChatNotFound();
+    }
+
+    if (profileAlreadyInChat) {
+      throw ChatMembersErrors.MemberAlreadyInChat();
+    }
+
+    if (!profileIsValid) {
+      throw ChatErrors.MemberCanNotBeAddedToChat();
+    }
+
+    if (!ownerChatMember) {
+      throw ChatMembersErrors.ChatOwnerNotFound();
+    }
+
+    const chatMember = MembersEntity.create({
+      profileId,
+      chatId,
+      role: ChatMemberRole.MEMBER,
+    });
+
+    this.chatService.canAddMemberToChat(chat, ownerChatMember);
+
+    // save to the database
+    await this.memberRepository.create(chatMember);
+
+    // we can also add a function to the chat entity that we can call that will store an event
+    // and will fire that event later on
+    chatMember.publishEvents(this.publisher, this.logger);
+
+    return this.chatMapper.toResponse(chat);
+  }
 
   async getChatMembers(
     chatId: string,
@@ -71,7 +120,7 @@ export class ChatsApplicationServiceImpl implements ChatsApplicationService {
     const { name, ownerProfileId, type } = input;
 
     const profileIsValid =
-      await this.profileApplicationService.validateProfileForChatCreation(
+      await this.profileApplicationService.validateProfileForChat(
         ownerProfileId,
       );
 

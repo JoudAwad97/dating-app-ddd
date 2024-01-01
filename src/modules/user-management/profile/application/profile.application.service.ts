@@ -22,7 +22,7 @@ export class ProfileApplicationServiceImpl
     private readonly publisher: EventPublisher,
   ) {}
 
-  async validateProfileForChatCreation(profileId: string): Promise<boolean> {
+  async validateProfileForChat(profileId: string): Promise<boolean> {
     const profile = await this.profileRepository.findById(profileId);
 
     if (!profile) {
