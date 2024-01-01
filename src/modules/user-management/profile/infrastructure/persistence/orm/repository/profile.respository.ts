@@ -7,6 +7,10 @@ import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma
 import { Prisma } from '@prisma/client';
 import { ProfileMapper } from '../mapper/profile.mapper.port';
 import { ProfileResponseDto } from '@src/modules/user-management/profile/presenter/dto/profile.dto';
+import {
+  OrderByTypes,
+  PaginationParams,
+} from '@src/libs/databases/prisma/pagination.types';
 
 @Injectable()
 export class ProfileRepositoryImpl
@@ -37,9 +41,7 @@ export class ProfileRepositoryImpl
 
   async getProfilesFilteredByDiscardedIds(
     ids: string[],
-    take: number = 20,
-    cursor: string | undefined,
-    orderBy: Prisma.ProfileOrderByWithRelationInput = { id: 'asc' },
+    { take = 20, cursor, orderBy = { id: OrderByTypes.ASC } }: PaginationParams,
   ): Promise<ProfileResponseDto[]> {
     return this.prismaService.profile
       .findMany({

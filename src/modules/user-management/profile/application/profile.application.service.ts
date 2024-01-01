@@ -14,6 +14,7 @@ import { ProfileUpdateDto } from '../presenter/dto/profile-update.dto';
 import { ProfileErrors } from '../domain/profile.errors';
 import { PaginatedQueryRequestDto } from '@src/libs/api/request/paginated-query.request.dto';
 import paginationUtil from '@src/libs/utils/pagination.util';
+import { OrderByTypes } from '@src/libs/databases/prisma/pagination.types';
 
 @Injectable()
 export class ProfileApplicationServiceImpl
@@ -36,10 +37,12 @@ export class ProfileApplicationServiceImpl
     const [data, count] = await Promise.all([
       this.profileRepository.getProfilesFilteredByDiscardedIds(
         discardedProfileIds,
-        take,
-        cursor,
         {
-          id: 'asc',
+          take,
+          cursor,
+          orderBy: {
+            id: OrderByTypes.ASC,
+          },
         },
       ),
       this.profileRepository.countProfileFilteredByDiscardedIds(

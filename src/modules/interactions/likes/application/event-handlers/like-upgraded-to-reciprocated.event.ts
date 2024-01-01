@@ -1,7 +1,7 @@
 import { EventsHandler } from '@nestjs/cqrs';
 import { LikeUpgradedToReciprocatedEvent } from '../../domain/events/like-upgraded-to-reciprocated.event';
 import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
-import { LikeRepository } from '../../infrastructure/persistence/orm/repository/like.repository.mapper';
+import { LikeRepository } from '../../infrastructure/persistence/orm/repository/like.repository.port';
 
 @EventsHandler(LikeUpgradedToReciprocatedEvent)
 export class LikeUpgradedToReciprocatedEventHandler {

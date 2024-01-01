@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { BaseOrmEntityRepository } from '@src/libs/databases/prisma/base-entity.repository';
 import { LikeEntity } from '@src/modules/interactions/likes/domain/like.entity';
 import { LikeDatabaseModel } from '../schema/like.schema';
-import { LikeRepository } from './like.repository.mapper';
+import { LikeRepository } from './like.repository.port';
 import { InteractionStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma';
 import { LikeMapper } from '../mapper/like.mapper.port';
+import {
+  OrderByTypes,
+  PaginationParams,
+} from '@src/libs/databases/prisma/pagination.types';
 
 @Injectable()
 export class LikeRepositoryImpl
@@ -56,9 +60,7 @@ export class LikeRepositoryImpl
 
   async getReceivedLikesByProfileId(
     profileId: string,
-    take: number = 20,
-    cursor: string | undefined,
-    orderBy: Prisma.LikeOrderByWithRelationInput = { id: 'asc' },
+    { take = 20, cursor, orderBy = { id: OrderByTypes.ASC } }: PaginationParams,
   ): Promise<LikeEntity[]> {
     return this.prismaService.like
       .findMany({

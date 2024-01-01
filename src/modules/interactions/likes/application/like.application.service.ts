@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { LikeApplicationService } from './ports/like.application.service.port';
 import { LikeResponseDto } from '../presenter/dto/like.dto';
 import { CreateLikeDto } from '../presenter/dto/like-create.dto';
-import { LikeRepository } from '../infrastructure/persistence/orm/repository/like.repository.mapper';
+import { LikeRepository } from '../infrastructure/persistence/orm/repository/like.repository.port';
 import { LikeMapper } from '../infrastructure/persistence/orm/mapper/like.mapper.port';
 import { EventPublisher } from '@src/libs/ports/event-publisher.port';
 import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
@@ -13,6 +13,7 @@ import { ProfileApplicationServiceContract } from './contract/profile-applicatio
 import paginationBuilder from '@src/libs/utils/pagination.util';
 import { LikeMessageApplicationService } from './ports/like-message.application.service.port';
 import { DislikeCreatedIntegrationEvent } from '@src/shared/infrastructure/publisher/integration-events/dislike-created.event.integration';
+import { OrderByTypes } from '@src/libs/databases/prisma/pagination.types';
 
 @Injectable()
 export class LikeApplicationServiceImpl
@@ -55,8 +56,12 @@ export class LikeApplicationServiceImpl
     const { take, cursor } = paginationBuilder.getQueryArgs(input);
 
     const [likes, count] = await Promise.all([
-      this.likeRepository.getReceivedLikesByProfileId(profileId, take, cursor, {
-        id: 'asc',
+      this.likeRepository.getReceivedLikesByProfileId(profileId, {
+        take,
+        cursor,
+        orderBy: {
+          createdAt: OrderByTypes.ASC,
+        },
       }),
       this.likeRepository.countReceivedLikesByProfileId(profileId),
     ]);

@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { PaginationParams } from '@src/libs/databases/prisma/pagination.types';
 import { RepositoryPort } from '@src/libs/ports/repository.port';
 import { LikeEntity } from '@src/modules/interactions/likes/domain/like.entity';
 
@@ -12,9 +12,7 @@ export abstract class LikeRepository extends RepositoryPort<LikeEntity> {
   ): Promise<LikeEntity | null>;
   abstract getReceivedLikesByProfileId(
     profileId: string,
-    take: number,
-    cursor: string | undefined,
-    orderBy: Prisma.LikeOrderByWithRelationInput,
+    paginationParams: PaginationParams,
   ): Promise<LikeEntity[]>;
   abstract countReceivedLikesByProfileId(profileId: string): Promise<number>;
 }

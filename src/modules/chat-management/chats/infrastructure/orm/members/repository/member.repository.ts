@@ -6,6 +6,10 @@ import { MemberDatabaseModel } from '../schema/members.schema';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '@src/shared/infrastructure/persistence/orm/prisma';
 import { MemberMapper } from '../mapper/member.mapper.port';
+import {
+  OrderByTypes,
+  PaginationParams,
+} from '@src/libs/databases/prisma/pagination.types';
 
 @Injectable()
 export class MembersRepositoryImpl
@@ -48,9 +52,7 @@ export class MembersRepositoryImpl
 
   async getPaginatedChatMembers(
     chatId: string,
-    take: number = 20,
-    cursor: string | undefined,
-    orderBy: Prisma.LikeOrderByWithRelationInput = { id: 'asc' },
+    { take = 20, cursor, orderBy = { id: OrderByTypes.ASC } }: PaginationParams,
   ): Promise<MembersEntity[]> {
     return this.prismaService.chatMember
       .findMany({

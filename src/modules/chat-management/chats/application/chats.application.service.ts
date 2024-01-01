@@ -22,6 +22,7 @@ import {
 import paginationBuilder from '@src/libs/utils/pagination.util';
 import { AssignMemberToChatDto } from '../presenter/dto/input/assign-member.dto';
 import { ChatMembersErrors } from '../domain/members/members.errors';
+import { OrderByTypes } from '@src/libs/databases/prisma/pagination.types';
 
 @Injectable()
 export class ChatsApplicationServiceImpl implements ChatsApplicationService {
@@ -91,8 +92,12 @@ export class ChatsApplicationServiceImpl implements ChatsApplicationService {
     const { take, cursor } = paginationBuilder.getQueryArgs(input);
 
     const [members, count] = await Promise.all([
-      this.memberRepository.getPaginatedChatMembers(chatId, take, cursor, {
-        id: 'asc',
+      this.memberRepository.getPaginatedChatMembers(chatId, {
+        take,
+        cursor,
+        orderBy: {
+          id: OrderByTypes.ASC,
+        },
       }),
       this.memberRepository.countChatMembers(chatId),
     ]);
