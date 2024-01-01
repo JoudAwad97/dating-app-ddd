@@ -23,4 +23,31 @@ export class MembersRepositoryImpl
     super(mapper);
     this.prismaService = new PrismaService();
   }
+
+  async countChatMembers(chatId: string): Promise<number> {
+    return this.prismaService.chatMember.count({
+      where: {
+        chatId,
+      },
+    });
+  }
+
+  async getPaginatedChatMembers(
+    chatId: string,
+    take: number = 20,
+    cursor: string | undefined,
+    orderBy: Prisma.LikeOrderByWithRelationInput = { id: 'asc' },
+  ): Promise<MembersEntity[]> {
+    return this.prismaService.chatMember
+      .findMany({
+        take,
+        skip: cursor ? 1 : 0,
+        where: {
+          chatId,
+        },
+        orderBy,
+        cursor: cursor ? { id: cursor } : undefined,
+      })
+      .then((res) => res.map((member) => this.mapper.toDomain(member)));
+  }
 }

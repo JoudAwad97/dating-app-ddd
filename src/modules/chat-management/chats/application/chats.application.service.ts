@@ -14,6 +14,12 @@ import { ChatsMapper } from '../infrastructure/orm/chats/mapper/chats.mapper.por
 import { EventPublisher } from '@src/libs/ports/event-publisher.port';
 import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 import { Injectable } from '@nestjs/common';
+import { PaginatedQueryRequestDto } from '@src/libs/api/request/paginated-query.request.dto';
+import {
+  ProfilePaginatedResponseDto,
+  ProfileResponseDto,
+} from '@src/modules/user-management/profile/presenter/dto/profile.dto';
+import paginationBuilder from '@src/libs/utils/pagination.util';
 
 @Injectable()
 export class ChatsApplicationServiceImpl implements ChatsApplicationService {
@@ -28,6 +34,38 @@ export class ChatsApplicationServiceImpl implements ChatsApplicationService {
     private readonly prismaService: PrismaService,
     private readonly publisher: EventPublisher,
   ) {}
+
+  async getChatMembers(
+    chatId: string,
+    input: PaginatedQueryRequestDto,
+  ): Promise<ProfilePaginatedResponseDto> {
+    const { take, cursor } = paginationBuilder.getQueryArgs(input);
+
+    const [members, count] = await Promise.all([
+      this.memberRepository.getPaginatedChatMembers(chatId, take, cursor, {
+        id: 'asc',
+      }),
+      this.memberRepository.countChatMembers(chatId),
+    ]);
+
+    const profileIds: string[] = [];
+    const membersIds: { id: string }[] = [];
+
+    members.forEach((like) => {
+      profileIds.push(like.getProps().profileId);
+      membersIds.push({ id: like.getProps().id });
+    });
+
+    const data =
+      await this.profileApplicationService.getProfileByIds(profileIds);
+
+    return paginationBuilder.buildPaginationOutputGenerator<ProfileResponseDto>(
+      data,
+      membersIds,
+      count,
+      input,
+    );
+  }
 
   async createChat(input: ChatsCreateDto): Promise<ChatResponseDto> {
     const { name, ownerProfileId, type } = input;

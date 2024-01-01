@@ -23,7 +23,6 @@ const interceptors: Provider[] = [
 const systemModules = [
   AccountModule,
   ProfileModule,
-  LoggerModule,
   ImageModule,
   LikeModule,
   DislikesModule,
@@ -31,7 +30,7 @@ const systemModules = [
   ChatsModule,
 ];
 
-const externalModules = [RequestContextModule];
+const externalModules = [RequestContextModule, LoggerModule];
 
 @Module({
   imports: [ConfigModule.forRoot(), ...systemModules, ...externalModules],

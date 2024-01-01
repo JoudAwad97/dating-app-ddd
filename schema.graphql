@@ -23,6 +23,7 @@ input AccountUpdateDto {
 type ChatResponseDto {
   createdAt: String!
   id: String!
+  members(input: PaginatedQueryRequestDto!): ProfilePaginatedResponseDto!
   name: String!
   status: ChatStatus!
   type: ChatTypes!
@@ -131,6 +132,11 @@ type PageInfo {
   """
   cursor: String
   hasNextPage: Boolean!
+  take: Float!
+}
+
+input PaginatedQueryRequestDto {
+  cursor: String
   take: Float!
 }
 

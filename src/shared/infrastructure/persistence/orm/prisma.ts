@@ -19,7 +19,7 @@ export class PrismaService
         { emit: 'event', level: 'warn' },
         { emit: 'event', level: 'error' },
       ],
-      errorFormat: 'colorless',
+      errorFormat: 'pretty',
     });
 
     new PrismaClient().$extends({
