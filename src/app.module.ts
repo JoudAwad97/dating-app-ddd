@@ -12,6 +12,7 @@ import { LikeModule } from './modules/interactions/likes/like.module';
 import { DislikesModule } from './modules/interactions/dislikes/dislikes.module';
 import { ReportsModule } from './modules/interactions/reports/reports.module';
 import { ChatsModule } from './modules/chat-management/chats/chats.module';
+import { DiscoveryModule } from './modules/discovery/discovery.module';
 
 const interceptors: Provider[] = [
   {
@@ -27,6 +28,7 @@ const systemModules = [
   LikeModule,
   DislikesModule,
   ReportsModule,
+  DiscoveryModule,
   ChatsModule,
 ];
 

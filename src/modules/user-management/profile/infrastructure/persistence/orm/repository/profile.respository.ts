@@ -25,6 +25,37 @@ export class ProfileRepositoryImpl
     this.prismaService = new PrismaService();
   }
 
+  async countProfileFilteredByDiscardedIds(ids: string[]): Promise<number> {
+    return this.prismaService.profile.count({
+      where: {
+        id: {
+          notIn: ids,
+        },
+      },
+    });
+  }
+
+  async getProfilesFilteredByDiscardedIds(
+    ids: string[],
+    take: number = 20,
+    cursor: string | undefined,
+    orderBy: Prisma.ProfileOrderByWithRelationInput = { id: 'asc' },
+  ): Promise<ProfileResponseDto[]> {
+    return this.prismaService.profile
+      .findMany({
+        cursor: cursor ? { id: cursor } : undefined,
+        take,
+        skip: cursor ? 1 : undefined,
+        where: {
+          id: {
+            notIn: ids,
+          },
+        },
+        orderBy,
+      })
+      .then((res) => res.map(this.mapper.toResponseFromPersistence));
+  }
+
   async getProfilesByIds(ids: string[]): Promise<ProfileResponseDto[]> {
     return this.prismaService.profile
       .findMany({

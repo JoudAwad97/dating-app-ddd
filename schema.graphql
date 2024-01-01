@@ -79,6 +79,12 @@ input DeleteImageDto {
   imageId: String!
 }
 
+input DiscoveryQueryDto {
+  cursor: String
+  profileId: String!
+  take: Float!
+}
+
 type DislikeResponseDto {
   createdAt: String!
   id: String!
@@ -175,6 +181,7 @@ input ProfileUpdateDto {
 }
 
 type Query {
+  discovery(input: DiscoveryQueryDto!): ProfilePaginatedResponseDto!
   getProfile(id: String!): ProfileResponseDto!
   hello: String!
   whoLikesMe(input: WhoLikesMeDto!): ProfilePaginatedResponseDto!

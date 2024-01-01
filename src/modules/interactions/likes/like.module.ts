@@ -11,6 +11,7 @@ import { ProfileModule } from '@src/modules/user-management/profile/profile.modu
 import { LikeMessageApplicationService } from './application/ports/like-message.application.service.port';
 import { LikeListener } from './presenter/messages/like.listener';
 import { ReportListener } from './presenter/messages/report.listener';
+import { DiscoveryInteractionApplicationServiceContract } from '@src/modules/discovery/application/contracts/interaction-application-service.contract';
 
 const resolvers: Provider[] = [LikeResolver];
 const applicationService: Provider[] = [
@@ -21,7 +22,11 @@ const applicationService: Provider[] = [
   {
     // consider using a different "Application service" for this port
     provide: LikeMessageApplicationService,
-    useExisting: LikeApplicationService,
+    useExisting: LikeApplicationServiceImpl,
+  },
+  {
+    provide: DiscoveryInteractionApplicationServiceContract,
+    useExisting: LikeApplicationServiceImpl,
   },
   LikeApplicationServiceImpl,
 ];
@@ -43,6 +48,6 @@ const listeners = [LikeListener, ReportListener];
   ],
   providers: [...resolvers, ...applicationService, ...eventHandlers],
   controllers: [...listeners],
-  exports: [],
+  exports: [DiscoveryInteractionApplicationServiceContract],
 })
 export class LikeModule {}

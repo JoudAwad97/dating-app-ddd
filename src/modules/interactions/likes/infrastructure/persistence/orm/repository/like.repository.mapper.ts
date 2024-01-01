@@ -3,6 +3,9 @@ import { RepositoryPort } from '@src/libs/ports/repository.port';
 import { LikeEntity } from '@src/modules/interactions/likes/domain/like.entity';
 
 export abstract class LikeRepository extends RepositoryPort<LikeEntity> {
+  abstract getInteractedProfilesIdForProfile(
+    profileId: string,
+  ): Promise<string[]>;
   abstract getLikeBySourceAndTargetProfilesByIds(
     sourceProfileId: string,
     targetProfileId: string,

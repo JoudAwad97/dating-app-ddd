@@ -8,6 +8,7 @@ import { PublisherModule } from '@src/shared/infrastructure/publisher/publisher.
 import { ImageModule } from '../images/image.module';
 import { ProfileApplicationServiceContract } from '@src/modules/interactions/likes/application/contract/profile-application-service.contract';
 import { ChatProfileApplicationServiceContract } from '@src/modules/chat-management/chats/application/contracts/profile-application-service.contract';
+import { DiscoveryProfileApplicationServiceContract } from '@src/modules/discovery/application/contracts/profile-application-service.contract';
 
 const resolvers: Provider[] = [ProfileResolver];
 const applicationServices: Provider[] = [
@@ -21,6 +22,10 @@ const applicationServices: Provider[] = [
   },
   {
     provide: ChatProfileApplicationServiceContract,
+    useExisting: ProfileApplicationServiceImpl,
+  },
+  {
+    provide: DiscoveryProfileApplicationServiceContract,
     useExisting: ProfileApplicationServiceImpl,
   },
   ProfileApplicationServiceImpl,
@@ -41,6 +46,7 @@ const dependingOnModules = [ImageModule];
   exports: [
     ProfileApplicationServiceContract,
     ChatProfileApplicationServiceContract,
+    DiscoveryProfileApplicationServiceContract,
   ],
 })
 export class ProfileModule {}

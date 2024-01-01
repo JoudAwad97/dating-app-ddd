@@ -20,6 +20,31 @@ export class LikeRepositoryImpl
     this.prismaService = new PrismaService();
   }
 
+  async getInteractedProfilesIdForProfile(
+    profileId: string,
+  ): Promise<string[]> {
+    const likes = await this.prismaService.like.findMany({
+      where: {
+        OR: [
+          {
+            sourceProfileId: profileId,
+          },
+          {
+            targetProfileId: profileId,
+          },
+        ],
+      },
+    });
+
+    return likes.map((like) => {
+      if (like.sourceProfileId === profileId) {
+        return like.targetProfileId;
+      } else {
+        return like.sourceProfileId;
+      }
+    });
+  }
+
   async countReceivedLikesByProfileId(profileId: string): Promise<number> {
     return this.prismaService.like.count({
       where: {

@@ -4,10 +4,12 @@ import { ProfileUpdateDto } from '../../presenter/dto/profile-update.dto';
 import { ProfileResponseDto } from '../../presenter/dto/profile.dto';
 import { Mixin } from 'ts-mixer';
 import { ChatProfileApplicationServiceContract } from '@src/modules/chat-management/chats/application/contracts/profile-application-service.contract';
+import { DiscoveryProfileApplicationServiceContract } from '@src/modules/discovery/application/contracts/profile-application-service.contract';
 
 export abstract class ProfileApplicationService extends Mixin(
   ProfileApplicationServiceContract,
   ChatProfileApplicationServiceContract,
+  DiscoveryProfileApplicationServiceContract,
 ) {
   abstract createProfile(input: ProfileCreateDto): Promise<ProfileResponseDto>;
   abstract updateProfile(input: ProfileUpdateDto): Promise<ProfileResponseDto>;

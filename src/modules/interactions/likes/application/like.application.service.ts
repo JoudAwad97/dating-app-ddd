@@ -27,6 +27,12 @@ export class LikeApplicationServiceImpl
     private readonly profileApplicationService: ProfileApplicationServiceContract,
   ) {}
 
+  async getInteractedProfilesIdForProfile(
+    profileId: string,
+  ): Promise<string[]> {
+    return this.likeRepository.getInteractedProfilesIdForProfile(profileId);
+  }
+
   async handleDislikeCreatedEvent(event: DislikeCreatedIntegrationEvent) {
     // check if there is a dislike between profiles and change the status to "DISCONNECTED"
     const { sourceProfileId, targetProfileId } = event;

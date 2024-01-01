@@ -1,6 +1,9 @@
 import { createLogger } from '@src/shared/infrastructure/logger/logger.factory';
 import { ProfileCreateDto } from '../presenter/dto/profile-create.dto';
-import { ProfileResponseDto } from '../presenter/dto/profile.dto';
+import {
+  ProfilePaginatedResponseDto,
+  ProfileResponseDto,
+} from '../presenter/dto/profile.dto';
 import { ProfileApplicationService } from './ports/profile.application.service.port';
 import { ProfileEntity } from '../domain/profile.entity';
 import { ProfileRepository } from '../infrastructure/persistence/orm/repository/profile.repository.port';
@@ -9,6 +12,8 @@ import { EventPublisher } from '@src/libs/ports/event-publisher.port';
 import { Injectable } from '@nestjs/common';
 import { ProfileUpdateDto } from '../presenter/dto/profile-update.dto';
 import { ProfileErrors } from '../domain/profile.errors';
+import { PaginatedQueryRequestDto } from '@src/libs/api/request/paginated-query.request.dto';
+import paginationUtil from '@src/libs/utils/pagination.util';
 
 @Injectable()
 export class ProfileApplicationServiceImpl
@@ -21,6 +26,34 @@ export class ProfileApplicationServiceImpl
     private readonly profileMapper: ProfileMapper,
     private readonly publisher: EventPublisher,
   ) {}
+
+  async getProfilesFilteredByDiscardedIds(
+    discardedProfileIds: string[],
+    input: PaginatedQueryRequestDto,
+  ): Promise<ProfilePaginatedResponseDto> {
+    const { take, cursor } = paginationUtil.getQueryArgs(input);
+
+    const [data, count] = await Promise.all([
+      this.profileRepository.getProfilesFilteredByDiscardedIds(
+        discardedProfileIds,
+        take,
+        cursor,
+        {
+          id: 'asc',
+        },
+      ),
+      this.profileRepository.countProfileFilteredByDiscardedIds(
+        discardedProfileIds,
+      ),
+    ]);
+
+    return paginationUtil.buildPaginationOutputGenerator(
+      data,
+      data,
+      count,
+      input,
+    );
+  }
 
   async validateProfileForChat(profileId: string): Promise<boolean> {
     const profile = await this.profileRepository.findById(profileId);
